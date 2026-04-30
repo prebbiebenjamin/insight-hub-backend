@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Project Details</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f5f7fb;
+margin:0;
+padding:0;
+}
+
+nav{
+background:#1e3a8a;
+color:white;
+padding:20px 50px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-weight:bold;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:40px;
+}
+
+.project-box{
+background:white;
+padding:40px;
+border-radius:20px;
+box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.project-box h1{
+font-size:40px;
+color:#1e3a8a;
+}
+
+.project-box p{
+font-size:18px;
+line-height:1.8;
+}
+
+.actions{
+margin-top:30px;
+}
+
+.actions button{
+padding:14px 24px;
+border:none;
+background:#2563eb;
+color:white;
+border-radius:10px;
+margin-right:15px;
+cursor:pointer;
+font-size:16px;
+}
+
+.actions button:hover{
+background:#1d4ed8;
+}
+
+.resource-links a{
+display:inline-block;
+margin:10px 15px 10px 0;
+text-decoration:none;
+background:#10b981;
+color:white;
+padding:12px 20px;
+border-radius:10px;
+}
+
+.comments{
+margin-top:50px;
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 8px 25px rgba(0,0,0,.05);
+}
+
+.comments textarea{
+width:100%;
+height:120px;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+.comment{
+background:#f1f5f9;
+padding:20px;
+margin-top:15px;
+border-radius:12px;
+}
+</style>
+</head>
+<body>
+
+<nav>
+<h2>InsightHub</h2>
+
+<div>
+<a href="index.html">Home</a>
+<a href="submit.html">Submit</a>
+<a href="admin.html">Admin</a>
+</div>
+</nav>
+
+
+
+<div class="container">
+
+<div id="projectContainer">
+Loading project...
+</div>
+
+
+<div class="comments">
+
+<h2>Comments & Feedback</h2>
+
+<textarea
+id="commentText"
+placeholder="Leave feedback or comments...">
+</textarea>
+
+<br>
+
+<button onclick="addComment()">
+Post Comment
+</button>
+
+<div id="commentsBox"></div>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+/* GET PROJECT ID FROM URL */
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const projectId =
+params.get("id");
+
+
+/* DEMO USER */
+const userId = 1;
+
+
+/* LOAD PROJECT DETAILS */
+async function loadProject(){
+
+try{
+
+let res=
+await fetch(
+`http://localhost:5000/projects/${projectId}`
+);
+
+let p=await res.json();
+
+
+document.getElementById(
+"projectContainer"
+).innerHTML=`
+
+<div class="project-box">
+
+<h1>${p.title}</h1>
+
+<p>
+<b>Student Name:</b>
+${p.student}
+</p>
+
+<p>
+<b>Department:</b>
+${p.department}
+</p>
+
+<p>
+<b>Supervisor:</b>
+${p.supervisor}
+</p>
+
+<p>
+<b>Academic Year:</b>
+${p.year}
+</p>
+
+<p>
+<b>Technology Used:</b>
+${p.technology}
+</p>
+
+<h3>Project Description</h3>
+
+<p>
+${p.description}
+</p>
+
+
+<div class="resource-links">
+
+<a href="${p.pdf_url || '#'}">
+View Full Report
+</a>
+
+<a href="${p.video_url || '#'}">
+Watch Demo
+</a>
+
+</div>
+
+
+<div class="actions">
+
+<button onclick="bookmarkProject()">
+Save / Bookmark
+</button>
+
+
+<button onclick="requestAccess()">
+Request Access
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+catch(error){
+
+document.getElementById(
+"projectContainer"
+).innerHTML=`
+
+<div class="project-box">
+
+<h1>AI Attendance System</h1>
+
+<p><b>Student Name:</b> David Akanni</p>
+
+<p><b>Department:</b> Computer Science</p>
+
+<p><b>Supervisor:</b> Dr Mensah</p>
+
+<p><b>Academic Year:</b> 2025</p>
+
+<p><b>Technology Used:</b>
+Node.js, PostgreSQL, HTML, CSS
+</p>
+
+<h3>Project Description</h3>
+
+<p>
+Smart attendance system using facial recognition.
+</p>
+
+</div>
+
+`;
+
+}
+
+}
+
+
+
+/* BOOKMARK PROJECT */
+async function bookmarkProject(){
+
+await fetch(
+"http://localhost:5000/bookmark",
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+user_id:userId,
+project_id:projectId
+})
+
+}
+);
+
+alert(
+"Project saved successfully"
+);
+
+}
+
+
+
+/* REQUEST ACCESS */
+async function requestAccess(){
+
+let message=
+prompt(
+"Enter message to author"
+);
+
+if(!message) return;
+
+await fetch(
+"http://localhost:5000/request-access",
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+user_id:userId,
+project_id:projectId,
+message
+})
+
+}
+);
+
+alert(
+"Access request sent"
+);
+
+}
+
+
+
+/* POST COMMENT */
+async function addComment(){
+
+let comment=
+document.getElementById(
+"commentText"
+).value;
+
+if(!comment) return;
+
+
+await fetch(
+"http://localhost:5000/comments",
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+user_id:userId,
+project_id:projectId,
+comment
+})
+
+}
+);
+
+document.getElementById(
+"commentText"
+).value="";
+
+
+loadComments();
+
+}
+
+
+
+/* LOAD COMMENTS */
+async function loadComments(){
+
+try{
+
+let res=
+await fetch(
+`http://localhost:5000/comments/${projectId}`
+);
+
+let data=
+await res.json();
+
+let html="";
+
+data.forEach(c=>{
+
+html+=`
+
+<div class="comment">
+<h4>${c.name}</h4>
+<p>${c.comment}</p>
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"commentsBox"
+).innerHTML=html;
+
+}
+catch{
+
+document.getElementById(
+"commentsBox"
+).innerHTML=`
+
+<div class="comment">
+<h4>Jane Doe</h4>
+<p>Very innovative project.</p>
+</div>
+
+`;
+
+}
+
+}
+
+
+
+/* RUN PAGE */
+loadProject();
+loadComments();
+
+</script>
+
+</body>
+</html>

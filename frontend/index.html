@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>InsightHub</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+<h1>InsightHub</h1>
+
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="login.html">Login</a></li>
+<li><a href="register.html">Register</a></li>
+<li><a href="submit.html">Submit Project</a></li>
+<li><a href="bookmarks.html">Bookmarks</a></li>
+<li><a href="admin.html">Admin Panel</a></li>
+</ul>
+</nav>
+
+<section class="hero">
+<h2>Research Repository</h2>
+<p>Find Capstone Projects</p>
+</section>
+
+<div class="container">
+
+<div class="search-box">
+<input id="keyword" placeholder="Search projects">
+
+<select id="department">
+<option value="">Department</option>
+<option>Computer Science</option>
+<option>Networking</option>
+<option>Engineering</option>
+<option>Business</option>
+
+</select>
+
+<input id="year" placeholder="Year">
+
+<button onclick="searchProjects()">
+Search
+</button>
+</div>
+
+<div class="project-grid">
+
+<div class="project-card">
+
+<div class="project-image"
+style="
+background-image:url(
+'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80'
+);">
+</div>
+
+<div class="project-content">
+<h3>AI Research System</h3>
+
+<p>
+Machine learning research repository
+for students.
+</p>
+
+<button>View Project</button>
+
+</div>
+
+</div>
+
+
+<div class="project-card">
+
+<div class="project-image"
+style="
+background-image:url(
+'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=80'
+);">
+</div>
+
+<div class="project-content">
+<h3>Smart Campus App</h3>
+
+<p>
+Digital platform for campus services.
+</p>
+
+<button>View Project</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<section id="projects">
+
+<h2 class="section-title">
+Featured Capstone Projects
+</h2>
+
+<div id="projects" class="project-grid">
+
+<!-- Preview Card 1 -->
+<div class="project-card">
+<h2 class="project-title">
+AI Research Assistant
+</h2>
+
+<h4 class="student-name">
+By David Akanni
+</h4>
+
+<p class="short-description">
+An AI-powered system for helping students
+search research papers and capstone ideas.
+</p>
+
+<button class="view-btn"> <a href="projectDetails.html">View Full Project</a></button>
+</a>
+</div>
+
+
+<!-- Preview Card 2 -->
+<div class="project-card">
+<h2 class="project-title">
+Smart Campus Marketplace
+</h2>
+
+<h4 class="student-name">
+By John Mensah
+</h4>
+
+<p class="short-description">
+A student marketplace for buying, selling,
+and exchanging services on campus.
+</p>
+<button class="view-btn"> <a href="projectDetails.html">View Full Project</a></button>
+
+</div>
+
+
+<!-- Preview Card 3 -->
+<div class="project-card">
+<h2 class="project-title">
+Capstone Repository Search Engine
+</h2>
+
+<h4 class="student-name">
+By Mary Owusu
+</h4>
+
+<p class="short-description">
+Repository platform with filters by department,
+year, keywords and technologies.
+</p>
+
+<button class="view-btn"> <a href="projectDetails.html">View Full Project</a></button>
+</a>
+</div>
+
+</div>
+
+</section>
+
+<script src="script.js"></script>
+<script>
+
+function openProject(id){
+window.location.href="projectDetails.html?id="+id;
+}
+
+</script>
+</body>
+</html>
